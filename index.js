@@ -30,14 +30,14 @@ async function run() {
     const productCollection = client.db('disneyWalt').collection('products');
     const toycollection = client.db('disneyWalt').collection('toys');
 
-// show products
-    app.get('/products', async(req, res) => {
-        const cursor = productCollection.find();
-        const result = await cursor.toArray();
-        res.send(result);
+    // show products
+    app.get('/products', async (req, res) => {
+      const cursor = productCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
     })
-  //  show product details
-    app.get('/products/:id', async(req, res) => {
+    //  show product details
+    app.get('/products/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const result = await productCollection.findOne(query);
@@ -45,18 +45,34 @@ async function run() {
     })
 
 
+    // my toys
+    app.get('/toys', async (req, res) => {
+      console.log(req.query.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email }
+      }
+      const result = await toycollection.find(query).toArray();
+      res.send(result);
+    })
+
+
+
     // add toys in mongodb
-    app.post('/toys' , async(req, res) => {
+    app.post('/toys', async (req, res) => {
       const toy = req.body;
       console.log(toy);
       const result = await toycollection.insertOne(toy);
       res.send(result);
     });
 
-
-
-
-
+    // delete toys from mongodb
+    app.delete('/toys/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await toycollection.deleteOne(query);
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -70,9 +86,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('disney is running')
+  res.send('disney is running')
 })
 
 app.listen(port, () => {
-    console.log(`disney is running on port ${port}`)
+  console.log(`disney is running on port ${port}`)
 })
