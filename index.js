@@ -28,6 +28,7 @@ async function run() {
     await client.connect();
 
     const productCollection = client.db('disneyWalt').collection('products');
+    const toycollection = client.db('disneyWalt').collection('toys');
 
 // show products
     app.get('/products', async(req, res) => {
@@ -42,6 +43,15 @@ async function run() {
       const result = await productCollection.findOne(query);
       res.send(result);
     })
+
+
+    // add toys in mongodb
+    app.post('/toys' , async(req, res) => {
+      const toy = req.body;
+      console.log(toy);
+      const result = await toycollection.insertOne(toy);
+      res.send(result);
+    });
 
 
 
