@@ -50,6 +50,14 @@ async function run() {
       res.send(result);
     })
 
+    // show users toy details
+    app.get('/alltoys/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await toycollection.findOne(query);
+      res.send(result);
+    })
+
 
     // my toys
     app.get('/toys', async (req, res) => {
