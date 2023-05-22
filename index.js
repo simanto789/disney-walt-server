@@ -43,6 +43,12 @@ async function run() {
       const result = await productCollection.findOne(query);
       res.send(result);
     })
+    // show users toy
+    app.get('/alltoys', async (req, res) => {
+      const cursor = toycollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
 
 
     // my toys
