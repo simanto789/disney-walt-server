@@ -45,7 +45,7 @@ async function run() {
     })
     // show users toy
     app.get('/alltoys', async (req, res) => {
-      const cursor = toycollection.find();
+      const cursor = toycollection.find().limit(20);
       const result = await cursor.toArray();
       res.send(result);
     })
